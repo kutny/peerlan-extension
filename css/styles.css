@@ -1,0 +1,87 @@
+body {
+    background-color: white;
+    color: black;
+    font: 90%/1.6 "Trebuchet MS", "Geneva CE", lucida, sans-serif
+}
+
+.container {
+    margin: 0 auto;
+    border: 1px solid #eeeeee;
+}
+
+.container.options {
+    width: 530px;
+}
+
+a {
+    color: #2c8d3a;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a.noUnderline {
+    text-decoration: none;
+}
+
+a.noUnderline:hover {
+    text-decoration: underline;
+}
+
+.header {
+    background-color: #38b44a;
+    padding: 10px 20px;
+    color: white;
+}
+
+.formBox {
+    padding: 10px 20px;
+    background-color: white;
+}
+
+.optionsForm {
+    margin: 10px 0;
+}
+
+h1 {
+    color: white;
+    margin: 0;
+}
+
+span.required {
+    color: red;
+}
+
+input {
+    font-size: 1.3em;
+}
+
+input.invalid {
+    border: 2px solid red;
+}
+
+button.bigButton {
+    font-size: 1.3em;
+    padding: 5px;
+}
+
+fieldset {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #F0F0F0;
+    border: none;
+}
+
+label {
+    cursor: pointer;
+    font-size: 1.3em;
+}
+
+.buttons {
+    margin-top: 15px;
+}
+
+form div {
+    margin-bottom: 5px;
+}

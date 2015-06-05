@@ -1,0 +1,2 @@
+var PeerlanLib = {};
+var PeerlanApp = {};

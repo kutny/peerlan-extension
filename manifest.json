@@ -1,0 +1,40 @@
+{
+	"manifest_version": 2,
+	"name": "Peerlan",
+	"version": "1.0.9",
+	"description": "Peerlan - Bondora loan picker",
+	"background": {
+		"page": "background.html"
+	},
+	"options_page": "options.html",
+    "content_scripts": [
+        {
+            "matches": ["http://peerlan.my/*"],
+            "js": ["js/extensionChecker.js"],
+            "run_at": "document_start"
+        },
+        {
+            "matches": ["http://peerlan.my/*"],
+            "js": ["js/messenger.js"]
+        }
+    ],
+	"browser_action": {
+		"default_title": "Show loans that match your filters"
+	},
+	"permissions": [
+        "notifications",
+        "http://peerlan.my/*",
+        "https://www.bondora.cz/*"
+	],
+    "externally_connectable": {
+        "matches": [
+            "http://peerlan.my/*"
+        ]
+    },
+    "icons": {
+        "16": "img/icon_16.png",
+        "48": "img/icon_48.png",
+        "64": "img/icon_64.png",
+        "128": "img/icon_128.png"
+    }
+}

@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>Peerlan options</title>
+	<script type="text/javascript" src="js/namespaces.js"></script>
+	<script type="text/javascript" src="js/PeerlanApp/Container.js"></script>
+	<script type="text/javascript" src="js/PeerlanLib/Ajax/XmlHttpRequestFactory.js"></script>
+	<script type="text/javascript" src="js/PeerlanLib/Http/Client.js"></script>
+	<script type="text/javascript" src="js/PeerlanLib/Http/Client/Config.js"></script>
+	<script type="text/javascript" src="js/PeerlanLib/Tab/TabOpener.js"></script>
+	<script type="text/javascript" src="js/PeerlanApp/Options/OptionsController.js"></script>
+	<script type="text/javascript" src="js/PeerlanApp/BondoraUrlBuilder.js"></script>
+	<script type="text/javascript" src="js/PeerlanApp/LoansOverview/LoansOverviewOpener.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen, projection, tv" />
+</head>
+<body>
+<div class="container options">
+	<div class="header">
+		<h1>Peerlan extension settings</h1>
+	</div>
+	<div class="formBox">
+		<form action="#" method="post" id="peerlanOptionsForm" class="optionsForm">
+			<fieldset>
+			<div>
+				<label for="extensionAuthHash">Authentication key<span class="required">*</span></label>:<br />
+				<input type="text" size="47" name="extensionAuthHash" id="extensionAuthHash" />
+			</div>
+			<div>Copy the Authentication key from <a href="" id="peerlanProfileUrl" target="_blank">your profile page</a>.</div>
+			</fieldset>
+			<div class="buttons">
+				<button type="submit" id="saveOptions" class="bigButton">Save settings</button>
+			</div>
+		</form>
+	</div>
+</div>
+</body>
+</html>
