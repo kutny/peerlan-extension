@@ -220,6 +220,7 @@
 					return new PeerlanApp.BackgroundProcessHandler(
 						$parameters.loansCheckingTimeoutSeconds,
 						$this.getExtensionAuthHashFetcher(),
+						$this.getPushMessagesHandler(),
 						$this.getInvestingRobot(),
 						$this.getLoansOverviewOpener()
 					);
@@ -239,6 +240,24 @@
 			)
 		};
 
+		/**
+		 * @returns PeerlanApp.PushMessagesHandler
+		 */
+		this.getPushMessagesHandler = function() {
+			return getService(
+				'getPushMessagesHandler',
+				function() {
+					return new PeerlanApp.PushMessagesHandler(
+						$parameters.messagingSenderId,
+						$parameters.extensionRegistrationEndpoint,
+						$parameters.extensionUnregistrationEndpoint,
+						$this.getHttpClient(),
+						$this.getServerLogger()
+					);
+				}
+			)
+		};
+
 		function getService(name, createInstanceCallback) {
 			if (typeof $services[name] === 'undefined') {
 				$services[name] = createInstanceCallback();
@@ -254,6 +273,9 @@ function buildParameters() {
 	var peerlanBaseUrl = 'http://peerlan.my';
 
 	return {
+		messagingSenderId: '212859967210',
+		extensionRegistrationEndpoint: peerlanBaseUrl + '/extension/messaging-registration',
+		extensionUnregistrationEndpoint: peerlanBaseUrl + '/extension/messaging-unregistration',
 		fetchConfigUrl: peerlanBaseUrl + '/extension/fetch-config',
 		authHashValidationUrl: peerlanBaseUrl + '/extension/auth-hash-validation',
 		serverLoggerUrl: peerlanBaseUrl + '/extension/log',

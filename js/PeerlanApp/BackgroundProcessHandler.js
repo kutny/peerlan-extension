@@ -3,11 +3,12 @@
 /**
  * @param {Number} $loansCheckingTimeoutSeconds
  * @param {PeerlanApp.Options.ExtensionAuthHashFetcher} $extensionAuthHashFetcher
+ * @param {PeerlanApp.PushMessagesHandler} $pushMessagesHandler
  * @param {PeerlanApp.AutoInvesting.InvestingRobot} $investingRobot
  * @param {PeerlanApp.LoansOverview.LoansOverviewOpener} $loansOverviewOpener
  * @constructor
  */
-PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $extensionAuthHashFetcher, $investingRobot, $loansOverviewOpener) {
+PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $extensionAuthHashFetcher, $pushMessagesHandler, $investingRobot, $loansOverviewOpener) {
 
 	var investingIntervalId;
 	var countdown;
@@ -25,6 +26,19 @@ PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $ex
 		};
 
 		chrome.runtime.onMessageExternal.addListener(onMessageExternalListener);
+
+		chrome.gcm.onMessage.addListener(function(message) {
+			var messageData = message.data;
+
+			var notification = new Notification(messageData.title, {
+				icon: chrome.extension.getURL('/img/icon_128.png'),
+				body: messageData.body
+			});
+
+			notification.addEventListener('click', function() {
+				$loansOverviewOpener.openLoansOverview();
+			});
+		});
 
 		startInvestingRobot();
 	};
@@ -47,6 +61,8 @@ PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $ex
 		else {
 			chrome.browserAction.setBadgeText({text: ''});
 		}
+
+		$pushMessagesHandler.registerListener();
 
 		countdown = new PeerlanApp.AutoInvesting.Countdown($loansCheckingTimeoutSeconds);
 		$investingRobot.startInvesting();

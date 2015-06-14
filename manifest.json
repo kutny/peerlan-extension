@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Peerlan",
-	"version": "1.0.9",
+	"version": "1.0.13",
 	"description": "Peerlan - Bondora loan picker",
 	"background": {
 		"page": "background.html"
@@ -22,6 +22,8 @@
 		"default_title": "Show loans that match your filters"
 	},
 	"permissions": [
+		"gcm",
+		"storage",
         "notifications",
         "http://peerlan.my/*",
         "https://www.bondora.cz/*"
