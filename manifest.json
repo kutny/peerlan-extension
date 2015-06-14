@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Peerlan",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"description": "Peerlan - Bondora loan picker",
 	"background": {
 		"page": "background.html"
@@ -12,10 +12,6 @@
             "matches": ["http://peerlan.my/*"],
             "js": ["js/extensionChecker.js"],
             "run_at": "document_start"
-        },
-        {
-            "matches": ["http://peerlan.my/*"],
-            "js": ["js/messenger.js"]
         }
     ],
 	"browser_action": {
@@ -25,8 +21,7 @@
 		"gcm",
 		"storage",
         "notifications",
-        "http://peerlan.my/*",
-        "https://www.bondora.cz/*"
+        "http://peerlan.my/*"
 	],
     "externally_connectable": {
         "matches": [

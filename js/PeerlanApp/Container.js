@@ -61,39 +61,6 @@
 		};
 
 		/**
-		 * @returns PeerlanApp.AutoInvesting.LoanListParser
-		 */
-		this.getLoanListParser = function() {
-			return getService(
-				'getLoanListParser',
-				function() {
-					return new PeerlanApp.AutoInvesting.LoanListParser(
-						$this.getHttpClient(),
-						$this.getLoanIdsParser(),
-						$this.getUrlParser(),
-						$this.getBondoraUrlBuilder()
-					);
-				}
-			)
-		};
-
-		/**
-		 * @returns PeerlanApp.AutoInvesting.ConfigFetcher
-		 */
-		this.getConfigFetcher = function() {
-			return getService(
-				'getConfigFetcher',
-				function() {
-					return new PeerlanApp.AutoInvesting.ConfigFetcher(
-						$parameters.fetchConfigUrl,
-						$this.getExtensionIdManager(),
-						$this.getHttpClient()
-					);
-				}
-			)
-		};
-
-		/**
 		 * @returns PeerlanLib.Url.UrlParser
 		 */
 		this.getUrlParser = function() {
@@ -113,52 +80,6 @@
 				'getTabOpener',
 				function() {
 					return new PeerlanLib.Tab.TabOpener();
-				}
-			)
-		};
-
-		/**
-		 * @returns PeerlanApp.AutoInvesting.InvestingRobot
-		 */
-		this.getInvestingRobot = function() {
-			return getService(
-				'getInvestingRobot',
-				function() {
-					return new PeerlanApp.AutoInvesting.InvestingRobot(
-						$this.getConfigFetcher(),
-						$this.getLoanListParser(),
-						$this.getTabOpener(),
-						$this.getLoansOverviewOpener(),
-						$this.getServerLogger(),
-						$this.getUserLoansSaver()
-					);
-				}
-			)
-		};
-
-		/**
-		 * @returns PeerlanApp.AutoInvesting.UserLoansSaver
-		 */
-		this.getUserLoansSaver = function() {
-			return getService(
-				'getUserLoansSaver',
-				function() {
-					return new PeerlanApp.AutoInvesting.UserLoansSaver(
-						$parameters.userLoanSaveEndpoint,
-						$this.getHttpClient()
-					);
-				}
-			)
-		};
-
-		/**
-		 * @returns PeerlanApp.AutoInvesting.LoanIdsParser
-		 */
-		this.getLoanIdsParser = function() {
-			return getService(
-				'getLoanIdsParser',
-				function() {
-					return new PeerlanApp.AutoInvesting.LoanIdsParser();
 				}
 			)
 		};
@@ -218,10 +139,8 @@
 				'getBackgroundProcessHandler',
 				function() {
 					return new PeerlanApp.BackgroundProcessHandler(
-						$parameters.loansCheckingTimeoutSeconds,
 						$this.getExtensionAuthHashFetcher(),
 						$this.getPushMessagesHandler(),
-						$this.getInvestingRobot(),
 						$this.getLoansOverviewOpener()
 					);
 				}
@@ -276,24 +195,13 @@ function buildParameters() {
 		messagingSenderId: '212859967210',
 		extensionRegistrationEndpoint: peerlanBaseUrl + '/extension/messaging-registration',
 		extensionUnregistrationEndpoint: peerlanBaseUrl + '/extension/messaging-unregistration',
-		fetchConfigUrl: peerlanBaseUrl + '/extension/fetch-config',
 		authHashValidationUrl: peerlanBaseUrl + '/extension/auth-hash-validation',
 		serverLoggerUrl: peerlanBaseUrl + '/extension/log',
 		profilePageUrl: peerlanBaseUrl + '/profile',
 		filterListPageUrl: peerlanBaseUrl + '/filters',
 		newLoansCheckingUrl: peerlanBaseUrl + '/new-loans-checking',
-		extensionAuthHashFetchEndpoint: peerlanBaseUrl + '/extension/auth-hash-fetch',
-		userLoanSaveEndpoint: peerlanBaseUrl + '/extension/save-user-loans',
-		loansCheckingTimeoutSeconds: 5 * 60
+		extensionAuthHashFetchEndpoint: peerlanBaseUrl + '/extension/auth-hash-fetch'
 	};
-}
-
-function notifyPage(message) {
-	chrome.tabs.query({}, function(tabs) {
-		for (var i = 0; i < tabs.length; ++i) {
-			chrome.tabs.sendMessage(tabs[i].id, message);
-		}
-	});
 }
 
 var container = new PeerlanApp.Container(buildParameters());

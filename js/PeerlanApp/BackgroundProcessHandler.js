@@ -1,31 +1,15 @@
 (function(PeerlanApp) {
 
 /**
- * @param {Number} $loansCheckingTimeoutSeconds
  * @param {PeerlanApp.Options.ExtensionAuthHashFetcher} $extensionAuthHashFetcher
  * @param {PeerlanApp.PushMessagesHandler} $pushMessagesHandler
- * @param {PeerlanApp.AutoInvesting.InvestingRobot} $investingRobot
  * @param {PeerlanApp.LoansOverview.LoansOverviewOpener} $loansOverviewOpener
  * @constructor
  */
-PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $extensionAuthHashFetcher, $pushMessagesHandler, $investingRobot, $loansOverviewOpener) {
-
-	var investingIntervalId;
-	var countdown;
+PeerlanApp.BackgroundProcessHandler = function($extensionAuthHashFetcher, $pushMessagesHandler, $loansOverviewOpener) {
 
 	this.start = function() {
 		chrome.browserAction.onClicked.addListener(extensionIconOnClickHandler);
-
-		var onMessageExternalListener = function(request, sender, sendResponse) {
-			if (request.name === 'checkLoans') {
-				$investingRobot.startInvesting();
-			}
-			else if (request.name === 'returnNexLoansCheckTimeout') {
-				sendResponse({countdownTime: Math.round(countdown.getCurrentTime())});
-			}
-		};
-
-		chrome.runtime.onMessageExternal.addListener(onMessageExternalListener);
 
 		chrome.gcm.onMessage.addListener(function(message) {
 			var messageData = message.data;
@@ -40,18 +24,14 @@ PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $ex
 			});
 		});
 
-		startInvestingRobot();
+		initExtension();
 	};
 
 	this.restart = function() {
-		if (investingIntervalId) {
-			clearInterval(investingIntervalId);
-		}
-
-		startInvestingRobot();
+		initExtension();
 	};
 
-	function startInvestingRobot() {
+	function initExtension() {
 		if (!extensionAuthHashSet()) {
 			fetchExtensionAuthHash();
 
@@ -63,18 +43,6 @@ PeerlanApp.BackgroundProcessHandler = function($loansCheckingTimeoutSeconds, $ex
 		}
 
 		$pushMessagesHandler.registerListener();
-
-		countdown = new PeerlanApp.AutoInvesting.Countdown($loansCheckingTimeoutSeconds);
-		$investingRobot.startInvesting();
-
-		investingIntervalId = setInterval(
-			function() {
-				countdown = new PeerlanApp.AutoInvesting.Countdown($loansCheckingTimeoutSeconds);
-
-				$investingRobot.startInvesting();
-			},
-			$loansCheckingTimeoutSeconds * 1000
-		);
 	}
 
 	function fetchExtensionAuthHash() {
