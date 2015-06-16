@@ -124,7 +124,7 @@
 				'getLoansOverviewOpener',
 				function() {
 					return new PeerlanApp.LoansOverview.LoansOverviewOpener(
-						$parameters.newLoansCheckingUrl,
+						$parameters.myLoansUrl,
 						$this.getTabOpener()
 					);
 				}
@@ -199,7 +199,7 @@ function buildParameters() {
 		serverLoggerUrl: peerlanBaseUrl + '/extension/log',
 		profilePageUrl: peerlanBaseUrl + '/profile',
 		filterListPageUrl: peerlanBaseUrl + '/filters',
-		newLoansCheckingUrl: peerlanBaseUrl + '/new-loans-checking',
+		myLoansUrl: peerlanBaseUrl + '/my-loans',
 		extensionAuthHashFetchEndpoint: peerlanBaseUrl + '/extension/auth-hash-fetch'
 	};
 }
