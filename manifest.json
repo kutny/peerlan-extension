@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Peerlan",
-	"version": "1.0.14",
+	"version": "1.0.15",
 	"description": "Peerlan - Bondora loan picker",
 	"background": {
 		"page": "background.html"

@@ -169,7 +169,6 @@
 					return new PeerlanApp.PushMessagesHandler(
 						$parameters.messagingSenderId,
 						$parameters.extensionRegistrationEndpoint,
-						$parameters.extensionUnregistrationEndpoint,
 						$this.getHttpClient(),
 						$this.getServerLogger()
 					);
@@ -194,7 +193,6 @@ function buildParameters() {
 	return {
 		messagingSenderId: '212859967210',
 		extensionRegistrationEndpoint: peerlanBaseUrl + '/extension/messaging-registration',
-		extensionUnregistrationEndpoint: peerlanBaseUrl + '/extension/messaging-unregistration',
 		authHashValidationUrl: peerlanBaseUrl + '/extension/auth-hash-validation',
 		serverLoggerUrl: peerlanBaseUrl + '/extension/log',
 		profilePageUrl: peerlanBaseUrl + '/profile',

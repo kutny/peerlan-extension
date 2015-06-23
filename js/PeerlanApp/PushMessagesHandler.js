@@ -3,16 +3,15 @@
 /**
  * @param {String} $messagingSenderId
  * @param {String} $extensionRegistrationEndpoint
- * @param {String} $extensionUnregistrationEndpoint
  * @param {PeerlanLib.Http.Client} $httpClient
  * @param {PeerlanApp.Log.ServerLogger} $serverLogger
  * @constructor
  */
-PeerlanApp.PushMessagesHandler = function($messagingSenderId, $extensionRegistrationEndpoint, $extensionUnregistrationEndpoint, $httpClient, $serverLogger) {
+PeerlanApp.PushMessagesHandler = function($messagingSenderId, $extensionRegistrationEndpoint, $httpClient, $serverLogger) {
 
 	this.registerListener = function() {
-		chrome.storage.local.get('extensionRegistrationId', function(result) {
-			if (result['extensionRegistrationId'])
+		chrome.storage.local.get('messagingRegistered', function(result) {
+			if (result['messagingRegistered'])
 			{
 				return;
 			}
@@ -20,8 +19,6 @@ PeerlanApp.PushMessagesHandler = function($messagingSenderId, $extensionRegistra
 			var senderIds = [$messagingSenderId];
 			chrome.gcm.register(senderIds, registerCallback);
 		});
-
-		chrome.gcm.unregister(unregisterCallback);
 	}
 
 	function registerCallback(registrationId) {
@@ -30,45 +27,22 @@ PeerlanApp.PushMessagesHandler = function($messagingSenderId, $extensionRegistra
 			return;
 		}
 
-		var config = createRegistrationRequestConfig($extensionRegistrationEndpoint, registrationId);
+		var config = createRegistrationRequestConfig(registrationId);
 
 		$httpClient.request(config, extensionRegistrationSuccess, extensionRegistrationFailure);
 	}
 
-	function extensionRegistrationSuccess(responseURL, responseText, config) {
-		var jsonResponse = JSON.parse(responseText);
-
-		chrome.storage.local.set({extensionRegistrationId: jsonResponse.registrationId});
+	function extensionRegistrationSuccess() {
+		chrome.storage.local.set({messagingRegistered: true});
 	}
 
 	function extensionRegistrationFailure() {
 	}
 
-	function unregisterCallback() {
-		if (chrome.runtime.lastError) {
-			$serverLogger.logOnServer('extensionIdUnregistrationError', chrome.runtime.lastError.message, localStorage.getItem('extensionAuthHash'));
-			return;
-		}
-
-		chrome.storage.local.get('extensionRegistrationId', function(result) {
-			var config = createRegistrationRequestConfig($extensionUnregistrationEndpoint, result['extensionRegistrationId']);
-
-			$httpClient.request(config, extensionUnregistrationSuccess, extensionUnregistrationFailure);
-		});
-	}
-
-	function extensionUnregistrationSuccess() {
-		chrome.storage.local.remove('extensionRegistrationId');
-	}
-
-	function extensionUnregistrationFailure() {
-		chrome.storage.local.remove('extensionRegistrationId');
-	}
-
-	function createRegistrationRequestConfig(endpoint, registrationId) {
+	function createRegistrationRequestConfig(registrationId) {
 		var postData = 'registrationId=' + encodeURIComponent(registrationId);
 
-		var config = new PeerlanLib.Http.Client.Config(endpoint);
+		var config = new PeerlanLib.Http.Client.Config($extensionRegistrationEndpoint);
 		config.setPostData(postData);
 		config.setHeaders([
 			{name: 'Authentication', value: localStorage.getItem('extensionAuthHash')}
